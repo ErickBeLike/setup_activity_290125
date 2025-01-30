@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario Visita</title>
+    <!-- Enlace a Bootstrap 5.3 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        .form-wrapper {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            padding: 30px;
+            background-color: #fff;
+            max-width: 600px;
+            margin: 0 auto;
+            margin-top: 5%;
+        }
+        .form-header {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #495057;
+        }
+        .form-label {
+            font-weight: bold;
+            color: #495057;
+        }
+        .form-button-group {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+        .btn-rounded {
+            border-radius: 50px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .btn-rounded:hover {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <div class="form-wrapper">
+        <h2 class="form-header" th:text="${visita.idVisita} ? 'Editar Visita' : 'Nueva Visita'"></h2>
+        <form th:action="@{${visita.idVisita != null} ? '/visitas/actualizar/' + ${visita.idVisita} : '/visitas/guardar'}"
+              method="post" th:object="${visita}" onsubmit="manejarFormulario(event, this)">
+            <input type="hidden" th:field="*{idVisita}">
+
+            <div class="mb-3">
+                <label class="form-label">Comercial</label>
+                <select class="form-control" th:field="*{idComercial}" required>
+                    <option value="" th:text="'Seleccione un Comercial'">Seleccione un Comercial</option>
+                    <option th:each="comercial : ${comerciales}" th:value="${comercial.idComercial}" th:text="${comercial.nombre}">Comercial</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Fecha</label>
+                <input type="date" class="form-control" th:field="*{fecha}" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Comentarios</label>
+                <textarea class="form-control" th:field="*{comentarios}" required></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Código Propuesta</label>
+                <input type="text" class="form-control" th:field="*{codigoPropuesta}" required>
+            </div>
+
+            <div class="form-button-group">
+                <a href="#" onclick="cargarContenido('/visitas'); return false;" class="btn btn-outline-danger btn-rounded">Cancelar</a>
+                <button type="submit" class="btn btn-success btn-rounded">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

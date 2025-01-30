@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario Proceso de Captación</title>
+    <!-- Enlace a Bootstrap 5.3 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        .form-wrapper {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            padding: 30px;
+            background-color: #fff;
+            max-width: 600px; /* Limita el ancho del formulario */
+            margin: 0 auto; /* Centra el formulario en la pantalla */
+            margin-top: 5%;
+        }
+        .form-header {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #495057;
+        }
+        .form-label {
+            font-weight: bold;
+            color: #495057;
+        }
+        .form-button-group {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+        .btn-rounded {
+            border-radius: 50px; /* Hace los botones redondeados */
+            padding: 10px 20px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .btn-rounded:hover {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5"> <!-- Añadido mt-5 para margen superior -->
+    <!-- Tarjeta que envuelve el formulario -->
+    <div class="form-wrapper">
+        <h2 class="form-header" th:text="${procesoCaptacion.idProcesoCaptacion} ? 'Editar Proceso de Captación' : 'Nuevo Proceso de Captación'"></h2>
+        <form th:action="@{${procesoCaptacion.idProcesoCaptacion != null} ? '/procesos/actualizar/' + ${procesoCaptacion.idProcesoCaptacion} : '/procesos/guardar'}"
+              method="post" th:object="${procesoCaptacion}" onsubmit="manejarFormulario(event, this)">
+            <input type="hidden" th:field="*{idProcesoCaptacion}">
+
+            <!-- Campos de información del proceso de captación -->
+            <div class="mb-3">
+                <label class="form-label">Tipo</label>
+                <input type="text" class="form-control" th:field="*{tipo}" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Fecha de Inicio</label>
+                <input type="date" class="form-control" th:field="*{fechaInicio}" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Fecha de Fin</label>
+                <input type="date" class="form-control" th:field="*{fechaFin}" required>
+            </div>
+
+            <!-- Grupo de botones para guardar o cancelar -->
+            <div class="form-button-group">
+                <a href="#" onclick="cargarContenido('/procesos'); return false;" class="btn btn-outline-danger btn-rounded">Cancelar</a>
+                <button type="submit" class="btn btn-success btn-rounded">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Scripts de Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

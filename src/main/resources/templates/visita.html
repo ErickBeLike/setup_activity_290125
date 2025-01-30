@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Visitas</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .table-wrapper {
+            margin-top: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .table thead {
+            background-color: #f8f9fa;
+            color: #495057;
+        }
+        .btn {
+            border-radius: 50px;
+        }
+        .btn i {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-4">
+    <div class="card table-wrapper">
+        <div class="card-body">
+            <h2 class="text-center mb-4">Lista de Visitas</h2>
+            <div class="d-flex justify-content-end">
+                <a href="#" onclick="cargarContenido('/visitas/nuevo'); return false;" class="btn btn-outline-success mb-3">
+                    <i class="fas fa-plus-circle"></i> Agregar Visita
+                </a>
+            </div>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>ID Comercial</th>
+                    <th>Fecha</th>
+                    <th>Comentarios</th>
+                    <th>Código de Propuesta</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="visita : ${visitas}">
+                    <td th:text="${visita.idVisita}"></td>
+                    <td th:text="${visita.idComercial}"></td>
+                    <td th:text="${visita.fecha}"></td>
+                    <td th:text="${visita.comentarios}"></td>
+                    <td th:text="${visita.codigoPropuesta}"></td>
+                    <td>
+                        <a href="#" th:onclick="|cargarContenido('/visitas/editar/' + ${visita.idVisita})|" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-edit"></i> Editar
+                        </a>
+                        <a href="#" th:if="${visita.idVisita != null}"
+                           th:onclick="|if(confirm('¿Estás seguro de eliminar esta visita?')) cargarContenido('/visitas/eliminar/' + ${visita.idVisita})|"
+                           class="btn btn-outline-danger btn-sm">
+                            <i class="fas fa-trash-alt"></i> Eliminar
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
