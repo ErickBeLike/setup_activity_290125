@@ -40,6 +40,14 @@ public class Sede {
         this.nombreResponsable = nombreResponsable;
     }
 
+    @PrePersist
+    public void prePersist() {
+        // Si fechaContratacion no está establecida, la asigna con la fecha actual
+        if (this.fechaInauguracion == null) {
+            this.fechaInauguracion = LocalDate.now();
+        }
+    }
+
     public Long getIdSede() {
         return idSede;
     }

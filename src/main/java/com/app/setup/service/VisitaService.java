@@ -57,7 +57,6 @@ public class VisitaService {
         // Actualizar los campos de la visita existente
         Comercial comercial = comercialService.buscarComercialPorId(visitaDTO.getIdComercial());
         visitaExistente.setIdComercial(comercial);
-        visitaExistente.setFecha(visitaDTO.getFecha());
         visitaExistente.setComentarios(visitaDTO.getComentarios());
         visitaExistente.setCodigoPropuesta(visitaDTO.getCodigoPropuesta());
 

@@ -44,6 +44,14 @@ public class Comercial {
         this.importeTotal = importeTotal;
     }
 
+    @PrePersist
+    public void prePersist() {
+        // Si fechaContratacion no está establecida, la asigna con la fecha actual
+        if (this.fechaContratacion == null) {
+            this.fechaContratacion = LocalDate.now();
+        }
+    }
+
     public Long getIdComercial() {
         return idComercial;
     }

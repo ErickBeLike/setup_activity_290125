@@ -13,8 +13,7 @@
             padding: 30px;
             background-color: #fff;
             max-width: 600px;
-            margin: 0 auto;
-            margin-top: 5%;
+            margin: 6% auto;
         }
         .form-header {
             font-size: 1.8rem;
@@ -57,11 +56,6 @@
                     <option value="" th:text="'Seleccione un Comercial'">Seleccione un Comercial</option>
                     <option th:each="comercial : ${comerciales}" th:value="${comercial.idComercial}" th:text="${comercial.nombre}">Comercial</option>
                 </select>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Fecha</label>
-                <input type="date" class="form-control" th:field="*{fecha}" required>
             </div>
 
             <div class="mb-3">

@@ -2,6 +2,8 @@ package com.app.setup.controller;
 
 import com.app.setup.entity.Cliente;
 import com.app.setup.service.ClienteService;
+import com.app.setup.service.PdfServiceCliente;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +17,8 @@ public class ClienteController {
 
     @Autowired
     private ClienteService clienteService;
+    @Autowired
+    private PdfServiceCliente pdfServiceCliente;
 
     // Mostrar todos los clientes en la tabla
     @GetMapping
@@ -58,5 +62,12 @@ public class ClienteController {
     public String eliminarCliente(@PathVariable Long id) {
         clienteService.eliminarCliente(id);
         return "redirect:/clientes";
+    }
+
+    // Método para generar el reporte en PDF
+    @GetMapping("/reporte")
+    public void generarReporte(HttpServletResponse response) throws Exception {
+        List<Cliente> listaClientes = clienteService.obtenerTodosLosClientes();
+        pdfServiceCliente.generarReporte(listaClientes, response);
     }
 }

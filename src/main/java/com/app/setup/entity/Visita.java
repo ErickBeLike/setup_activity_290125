@@ -35,6 +35,14 @@ public class Visita {
         this.codigoPropuesta = codigoPropuesta;
     }
 
+    @PrePersist
+    public void prePersist() {
+        // Si fechaContratacion no está establecida, la asigna con la fecha actual
+        if (this.fecha == null) {
+            this.fecha = LocalDate.now();
+        }
+    }
+
     public Long getIdVisita() {
         return idVisita;
     }

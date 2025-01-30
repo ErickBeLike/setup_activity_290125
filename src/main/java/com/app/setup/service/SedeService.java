@@ -39,7 +39,6 @@ public class SedeService {
         sedeExistente.setPoblacion(sedeActualizada.getPoblacion());
         sedeExistente.setCodigoPostal(sedeActualizada.getCodigoPostal());
         sedeExistente.setDireccion(sedeActualizada.getDireccion());
-        sedeExistente.setFechaInauguracion(sedeActualizada.getFechaInauguracion());
         sedeExistente.setNombreResponsable(sedeActualizada.getNombreResponsable());
 
         // Guardar los cambios

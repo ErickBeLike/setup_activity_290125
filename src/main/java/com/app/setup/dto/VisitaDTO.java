@@ -1,10 +1,8 @@
 package com.app.setup.dto;
 
-import com.app.setup.entity.Comercial;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class VisitaDTO {
 

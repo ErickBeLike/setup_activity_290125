@@ -37,7 +37,6 @@ public class CompetenciaService {
         // Actualizar los campos de la competencia existente
         competenciaExistente.setNombreCompetencia(competenciaActualizada.getNombreCompetencia());
         competenciaExistente.setDescripcion(competenciaActualizada.getDescripcion());
-        competenciaExistente.setFechaCreacion(competenciaActualizada.getFechaCreacion());
 
         // Guardar los cambios
         return competenciaRepository.save(competenciaExistente);

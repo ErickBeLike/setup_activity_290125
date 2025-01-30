@@ -31,6 +31,14 @@ public class Competencia {
         this.fechaCreacion = fechaCreacion;
     }
 
+    @PrePersist
+    public void prePersist() {
+        // Si fechaContratacion no está establecida, la asigna con la fecha actual
+        if (this.fechaCreacion == null) {
+            this.fechaCreacion = LocalDate.now();
+        }
+    }
+
     public Long getIdCompetencia() {
         return idCompetencia;
     }

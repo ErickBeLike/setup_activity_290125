@@ -3,7 +3,9 @@ package com.app.setup.controller;
 import com.app.setup.dto.VisitaDTO;
 import com.app.setup.entity.Comercial;
 import com.app.setup.service.ComercialService;
+import com.app.setup.service.PdfServiceVisita;
 import com.app.setup.service.VisitaService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,9 +19,10 @@ public class VisitaController {
 
     @Autowired
     private VisitaService visitaService;
-
     @Autowired
     private ComercialService comercialService;
+    @Autowired
+    private PdfServiceVisita pdfServiceVisita;
 
     // Obtener todas las visitas
     @GetMapping
@@ -74,4 +77,12 @@ public class VisitaController {
         visitaService.eliminarVisita(id);
         return "redirect:/visitas"; // Redirige a la lista de visitas
     }
+
+    @GetMapping("/reporte")
+    public void generarReporte(HttpServletResponse response) throws Exception {
+        List<VisitaDTO> listaVisitas = visitaService.obtenerTodasLasVisitas();
+        pdfServiceVisita.generarReporte(listaVisitas, response);
+    }
+
+
 }

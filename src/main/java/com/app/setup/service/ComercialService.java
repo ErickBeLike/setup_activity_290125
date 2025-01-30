@@ -40,7 +40,6 @@ public class ComercialService {
         comercialExistente.setApellidoMa(comercialActualizado.getApellidoMa());
         comercialExistente.setTelefono(comercialActualizado.getTelefono());
         comercialExistente.setCorreo(comercialActualizado.getCorreo());
-        comercialExistente.setFechaContratacion(comercialActualizado.getFechaContratacion());
         comercialExistente.setImporteTotal(comercialActualizado.getImporteTotal());
 
         // Guardar los cambios
