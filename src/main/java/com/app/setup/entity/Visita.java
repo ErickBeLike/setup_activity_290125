@@ -1,7 +1,9 @@
 package com.app.setup.entity;
 
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -16,7 +18,8 @@ public class Visita {
     @JoinColumn
     private Comercial idComercial;
     @Column
-    private Date fecha;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate fecha;
     @Column
     private String comentarios;
     @Column
@@ -25,7 +28,7 @@ public class Visita {
     public Visita() {
     }
 
-    public Visita(Comercial idComercial, Date fecha, String comentarios, int codigoPropuesta) {
+    public Visita(Comercial idComercial, LocalDate fecha, String comentarios, int codigoPropuesta) {
         this.idComercial = idComercial;
         this.fecha = fecha;
         this.comentarios = comentarios;
@@ -48,11 +51,11 @@ public class Visita {
         this.idComercial = idComercial;
     }
 
-    public Date getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 

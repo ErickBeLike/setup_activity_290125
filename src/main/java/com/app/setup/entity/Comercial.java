@@ -1,8 +1,10 @@
 package com.app.setup.entity;
 
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -24,14 +26,15 @@ public class Comercial {
     @Column
     private String correo;
     @Column
-    private LocalDateTime fechaContratacion;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate fechaContratacion;
     @Column(precision = 10, scale = 2)
     private BigDecimal importeTotal;
 
     public Comercial() {
     }
 
-    public Comercial(String nombre, String apellidoPa, String apellidoMa, String telefono, String correo, LocalDateTime fechaContratacion, BigDecimal importeTotal) {
+    public Comercial(String nombre, String apellidoPa, String apellidoMa, String telefono, String correo, LocalDate fechaContratacion, BigDecimal importeTotal) {
         this.nombre = nombre;
         this.apellidoPa = apellidoPa;
         this.apellidoMa = apellidoMa;
@@ -89,11 +92,11 @@ public class Comercial {
         this.correo = correo;
     }
 
-    public LocalDateTime getFechaContratacion() {
+    public LocalDate getFechaContratacion() {
         return fechaContratacion;
     }
 
-    public void setFechaContratacion(LocalDateTime fechaContratacion) {
+    public void setFechaContratacion(LocalDate fechaContratacion) {
         this.fechaContratacion = fechaContratacion;
     }
 

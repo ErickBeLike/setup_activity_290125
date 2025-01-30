@@ -3,43 +3,60 @@ package com.app.setup.controller;
 import com.app.setup.entity.Competencia;
 import com.app.setup.service.CompetenciaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/competencias")
+@Controller
+@RequestMapping("/competencias")
 public class CompetenciaController {
 
     @Autowired
     private CompetenciaService competenciaService;
 
+    // Mostrar todas las competencias en la tabla
     @GetMapping
-    public List<Competencia> obtenerTodasLasCompetencias() {
-        return competenciaService.obtenerTodasLasCompetencias();
+    public String listarCompetencias(Model model) {
+        List<Competencia> listaCompetencias = competenciaService.obtenerTodasLasCompetencias();
+        model.addAttribute("competencias", listaCompetencias);
+        return "competencia"; // Redirige a competencia.html
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Competencia> buscarCompetenciaPorId(@PathVariable Long id) {
+    // Mostrar formulario para agregar una nueva competencia
+    @GetMapping("/nuevo")
+    public String mostrarFormularioDeRegistro(Model model) {
+        model.addAttribute("competencia", new Competencia());
+        return "competencia-formulario"; // Redirige a competencia-formulario.html
+    }
+
+    // Guardar una nueva competencia
+    @PostMapping("/guardar")
+    public String guardarCompetencia(@ModelAttribute Competencia competencia) {
+        competenciaService.agregarCompetencia(competencia);
+        return "redirect:/competencias"; // Redirige a la tabla después de guardar
+    }
+
+    // Mostrar formulario para editar una competencia existente
+    @GetMapping("/editar/{id}")
+    public String mostrarFormularioDeEdicion(@PathVariable Long id, Model model) {
         Competencia competencia = competenciaService.buscarCompetenciaPorId(id);
-        return ResponseEntity.ok(competencia);
+        model.addAttribute("competencia", competencia);
+        return "competencia-formulario"; // Usa el mismo formulario para editar
     }
 
-    @PostMapping
-    public Competencia agregarCompetencia(@RequestBody Competencia competencia) {
-        return competenciaService.agregarCompetencia(competencia);
+    // Guardar la edición de una competencia
+    @PostMapping("/actualizar/{id}")
+    public String actualizarCompetencia(@PathVariable Long id, @ModelAttribute Competencia competencia) {
+        competenciaService.actualizarCompetencia(id, competencia);
+        return "redirect:/competencias";
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Competencia> actualizarCompetencia(@PathVariable Long id, @RequestBody Competencia competencia) {
-        Competencia competenciaActualizada = competenciaService.actualizarCompetencia(id, competencia);
-        return ResponseEntity.ok(competenciaActualizada);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarCompetencia(@PathVariable Long id) {
+    // Eliminar una competencia
+    @GetMapping("/eliminar/{id}")
+    public String eliminarCompetencia(@PathVariable Long id) {
         competenciaService.eliminarCompetencia(id);
-        return ResponseEntity.noContent().build();
+        return "redirect:/competencias";
     }
 }

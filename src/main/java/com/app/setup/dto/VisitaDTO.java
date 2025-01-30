@@ -1,21 +1,24 @@
 package com.app.setup.dto;
 
 import com.app.setup.entity.Comercial;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class VisitaDTO {
 
     private Long idVisita;
     private Long idComercial;
-    private Date fecha;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate fecha;
     private String comentarios;
     private int codigoPropuesta;
 
     public VisitaDTO() {
     }
 
-    public VisitaDTO(Long idVisita, Long idComercial, Date fecha, String comentarios, int codigoPropuesta) {
+    public VisitaDTO(Long idVisita, Long idComercial, LocalDate fecha, String comentarios, int codigoPropuesta) {
         this.idVisita = idVisita;
         this.idComercial = idComercial;
         this.fecha = fecha;
@@ -39,11 +42,11 @@ public class VisitaDTO {
         this.idComercial = idComercial;
     }
 
-    public Date getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 

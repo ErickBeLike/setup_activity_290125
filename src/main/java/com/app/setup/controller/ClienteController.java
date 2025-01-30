@@ -1,45 +1,62 @@
 package com.app.setup.controller;
 
-import com.app.setup.dto.CandidatoDTO;
 import com.app.setup.entity.Cliente;
 import com.app.setup.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/clientes")
+@Controller
+@RequestMapping("/clientes")
 public class ClienteController {
+
     @Autowired
     private ClienteService clienteService;
 
+    // Mostrar todos los clientes en la tabla
     @GetMapping
-    public List<Cliente> obtenerTodosLosClientes() {
-        return clienteService.obtenerTodosLosClientes();
+    public String listarClientes(Model model) {
+        List<Cliente> listaClientes = clienteService.obtenerTodosLosClientes();
+        model.addAttribute("clientes", listaClientes);
+        return "cliente"; // Redirige a cliente.html
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Cliente> buscarClientePorId(@PathVariable Long id) {
+    // Mostrar formulario para agregar un nuevo cliente
+    @GetMapping("/nuevo")
+    public String mostrarFormularioDeRegistro(Model model) {
+        model.addAttribute("cliente", new Cliente());
+        return "cliente-formulario"; // Redirige a cliente-formulario.html
+    }
+
+    // Guardar un nuevo cliente
+    @PostMapping("/guardar")
+    public String guardarCliente(@ModelAttribute Cliente cliente) {
+        clienteService.agregarCliente(cliente);
+        return "redirect:/clientes"; // Redirige a la tabla después de guardar
+    }
+
+    // Mostrar formulario para editar un cliente existente
+    @GetMapping("/editar/{id}")
+    public String mostrarFormularioDeEdicion(@PathVariable Long id, Model model) {
         Cliente cliente = clienteService.buscarClientePorId(id);
-        return ResponseEntity.ok(cliente);
+        model.addAttribute("cliente", cliente);
+        return "cliente-formulario"; // Usa el mismo formulario para editar
     }
 
-    @PostMapping
-    public Cliente agregarCliente(@RequestBody Cliente cliente) {
-        return clienteService.agregarCliente(cliente);
+    // Guardar la edición de un cliente
+    @PostMapping("/actualizar/{id}")
+    public String actualizarCliente(@PathVariable Long id, @ModelAttribute Cliente cliente) {
+        clienteService.actualizarCliente(id, cliente);
+        return "redirect:/clientes";
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Cliente> actualizarCliente(@PathVariable Long id, @RequestBody Cliente cliente) {
-        Cliente clienteActualizado = clienteService.actualizarCliente(id, cliente);
-        return ResponseEntity.ok(clienteActualizado);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarCliente(@PathVariable Long id) {
+    // Eliminar un cliente
+    @GetMapping("/eliminar/{id}")
+    public String eliminarCliente(@PathVariable Long id) {
         clienteService.eliminarCliente(id);
-        return ResponseEntity.noContent().build();
+        return "redirect:/clientes";
     }
 }

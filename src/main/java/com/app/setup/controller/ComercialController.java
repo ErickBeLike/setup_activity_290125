@@ -3,43 +3,61 @@ package com.app.setup.controller;
 import com.app.setup.entity.Comercial;
 import com.app.setup.service.ComercialService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/comerciales")
+@Controller
+@RequestMapping("/comerciales")
 public class ComercialController {
 
     @Autowired
     private ComercialService comercialService;
 
+    // Mostrar todos los comerciales en la tabla
     @GetMapping
-    public List<Comercial> obtenerTodosLosComerciales() {
-        return comercialService.obtenerTodosLosComerciales();
+    public String listarComerciales(Model model) {
+        List<Comercial> listaComerciales = comercialService.obtenerTodosLosComerciales();
+        model.addAttribute("comerciales", listaComerciales);
+        return "comercial"; // Redirige a comercial.html
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Comercial> buscarComercialPorId(@PathVariable Long id) {
+    // Mostrar formulario para agregar un nuevo comercial
+    @GetMapping("/nuevo")
+    public String mostrarFormularioDeRegistro(Model model) {
+        model.addAttribute("comercial", new Comercial());
+        return "comercial-formulario"; // Redirige a comercial-formulario.html
+    }
+
+    // Guardar un nuevo comercial
+    @PostMapping("/guardar")
+    public String guardarComercial(@ModelAttribute Comercial comercial) {
+        comercialService.agregarComercial(comercial);
+        return "redirect:/comerciales"; // Redirige a la tabla después de guardar
+    }
+
+    // Mostrar formulario para editar un comercial existente
+    @GetMapping("/editar/{id}")
+    public String mostrarFormularioDeEdicion(@PathVariable Long id, Model model) {
         Comercial comercial = comercialService.buscarComercialPorId(id);
-        return ResponseEntity.ok(comercial);
+        model.addAttribute("comercial", comercial); // Solo pasa el objeto comercial
+        return "comercial-formulario"; // Redirige al formulario
     }
 
-    @PostMapping
-    public Comercial agregarComercial(@RequestBody Comercial comercial) {
-        return comercialService.agregarComercial(comercial);
+    // Guardar la edición de un comercial
+    @PostMapping("/actualizar/{id}")
+    public String actualizarComercial(@PathVariable Long id, @ModelAttribute Comercial comercial) {
+        comercialService.actualizarComercial(id, comercial);
+        return "redirect:/comerciales";
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Comercial> actualizarComercial(@PathVariable Long id, @RequestBody Comercial comercial) {
-        Comercial comercialActualizado = comercialService.actualizarComercial(id, comercial);
-        return ResponseEntity.ok(comercialActualizado);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarComercial(@PathVariable Long id) {
+    // Eliminar un comercial
+    @GetMapping("/eliminar/{id}")
+    public String eliminarComercial(@PathVariable Long id) {
         comercialService.eliminarComercial(id);
-        return ResponseEntity.noContent().build();
+        return "redirect:/comerciales";
     }
 }

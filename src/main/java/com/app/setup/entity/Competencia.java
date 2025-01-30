@@ -1,7 +1,9 @@
 package com.app.setup.entity;
 
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -17,12 +19,13 @@ public class Competencia {
     @Column
     private String descripcion;
     @Column
-    private LocalDateTime fechaCreacion;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate fechaCreacion;
 
     public Competencia() {
     }
 
-    public Competencia(String nombreCompetencia, String descripcion, LocalDateTime fechaCreacion) {
+    public Competencia(String nombreCompetencia, String descripcion, LocalDate fechaCreacion) {
         this.nombreCompetencia = nombreCompetencia;
         this.descripcion = descripcion;
         this.fechaCreacion = fechaCreacion;
@@ -52,11 +55,11 @@ public class Competencia {
         this.descripcion = descripcion;
     }
 
-    public LocalDateTime getFechaCreacion() {
+    public LocalDate getFechaCreacion() {
         return fechaCreacion;
     }
 
-    public void setFechaCreacion(LocalDateTime fechaCreacion) {
+    public void setFechaCreacion(LocalDate fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
 }

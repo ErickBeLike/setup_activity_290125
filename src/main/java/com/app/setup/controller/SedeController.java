@@ -3,49 +3,60 @@ package com.app.setup.controller;
 import com.app.setup.entity.Sede;
 import com.app.setup.service.SedeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/sedes")
+@Controller
+@RequestMapping("/sedes")
 public class SedeController {
 
     @Autowired
     private SedeService sedeService;
 
-    // Obtener todas las sedes
+    // Mostrar todas las sedes en la tabla
     @GetMapping
-    public List<Sede> obtenerTodasLasSedes() {
-        return sedeService.obtenerTodasLasSedes();
+    public String listarSedes(Model model) {
+        List<Sede> listaSedes = sedeService.obtenerTodasLasSedes();
+        model.addAttribute("sedes", listaSedes);
+        return "sede"; // Redirige a sede.html
     }
 
-    // Buscar sede por ID
-    @GetMapping("/{id}")
-    public ResponseEntity<Sede> buscarSedePorId(@PathVariable Long id) {
+    // Mostrar formulario para agregar una nueva sede
+    @GetMapping("/nuevo")
+    public String mostrarFormularioDeRegistro(Model model) {
+        model.addAttribute("sede", new Sede());
+        return "sede-formulario"; // Redirige a sede-formulario.html
+    }
+
+    // Guardar una nueva sede
+    @PostMapping("/guardar")
+    public String guardarSede(@ModelAttribute Sede sede) {
+        sedeService.agregarSede(sede);
+        return "redirect:/sedes"; // Redirige a la tabla después de guardar
+    }
+
+    // Mostrar formulario para editar una sede existente
+    @GetMapping("/editar/{id}")
+    public String mostrarFormularioDeEdicion(@PathVariable Long id, Model model) {
         Sede sede = sedeService.buscarSedePorId(id);
-        return ResponseEntity.ok(sede);
+        model.addAttribute("sede", sede);
+        return "sede-formulario"; // Usa el mismo formulario para editar
     }
 
-    // Agregar una nueva sede
-    @PostMapping
-    public ResponseEntity<Sede> agregarSede(@RequestBody Sede sede) {
-        Sede nuevaSede = sedeService.agregarSede(sede);
-        return ResponseEntity.ok(nuevaSede);
+    // Guardar la edición de una sede
+    @PostMapping("/actualizar/{id}")
+    public String actualizarSede(@PathVariable Long id, @ModelAttribute Sede sede) {
+        sedeService.actualizarSede(id, sede);
+        return "redirect:/sedes";
     }
 
-    // Actualizar una sede existente
-    @PutMapping("/{id}")
-    public ResponseEntity<Sede> actualizarSede(@PathVariable Long id, @RequestBody Sede sedeActualizada) {
-        Sede sede = sedeService.actualizarSede(id, sedeActualizada);
-        return ResponseEntity.ok(sede);
-    }
-
-    // Eliminar una sede por ID
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarSede(@PathVariable Long id) {
+    // Eliminar una sede
+    @GetMapping("/eliminar/{id}")
+    public String eliminarSede(@PathVariable Long id) {
         sedeService.eliminarSede(id);
-        return ResponseEntity.noContent().build();
+        return "redirect:/sedes";
     }
 }

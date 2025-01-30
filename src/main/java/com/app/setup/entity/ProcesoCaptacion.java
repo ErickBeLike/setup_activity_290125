@@ -1,7 +1,9 @@
 package com.app.setup.entity;
 
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -15,14 +17,16 @@ public class ProcesoCaptacion {
     @Column
     private String tipo;
     @Column
-    private Date fechaInicio;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate fechaInicio;
     @Column
-    private Date fechaFin;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate fechaFin;
 
     public ProcesoCaptacion() {
     }
 
-    public ProcesoCaptacion(String tipo, Date fechaInicio, Date fechaFin) {
+    public ProcesoCaptacion(String tipo, LocalDate fechaInicio, LocalDate fechaFin) {
         this.tipo = tipo;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
@@ -44,19 +48,19 @@ public class ProcesoCaptacion {
         this.tipo = tipo;
     }
 
-    public Date getFechaInicio() {
+    public LocalDate getFechaInicio() {
         return fechaInicio;
     }
 
-    public void setFechaInicio(Date fechaInicio) {
+    public void setFechaInicio(LocalDate fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
 
-    public Date getFechaFin() {
+    public LocalDate getFechaFin() {
         return fechaFin;
     }
 
-    public void setFechaFin(Date fechaFin) {
+    public void setFechaFin(LocalDate fechaFin) {
         this.fechaFin = fechaFin;
     }
 }
