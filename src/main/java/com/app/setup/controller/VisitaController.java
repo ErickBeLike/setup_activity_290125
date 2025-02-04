@@ -7,6 +7,8 @@ import com.app.setup.service.PdfServiceVisita;
 import com.app.setup.service.VisitaService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -79,10 +81,15 @@ public class VisitaController {
     }
 
     @GetMapping("/reporte")
-    public void generarReporte(HttpServletResponse response) throws Exception {
-        List<VisitaDTO> listaVisitas = visitaService.obtenerTodasLasVisitas();
-        pdfServiceVisita.generarReporte(listaVisitas, response);
+    public ResponseEntity<String> generarReporte() {
+        try {
+            List<VisitaDTO> listaVisitas = visitaService.obtenerTodasLasVisitas();
+            pdfServiceVisita.generarReporte(listaVisitas);
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al generar el reporte.");
+        }
     }
-
-
 }

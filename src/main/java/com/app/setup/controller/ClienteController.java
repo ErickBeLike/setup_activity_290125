@@ -5,10 +5,16 @@ import com.app.setup.service.ClienteService;
 import com.app.setup.service.PdfServiceCliente;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 @Controller
@@ -66,8 +72,16 @@ public class ClienteController {
 
     // Método para generar el reporte en PDF
     @GetMapping("/reporte")
-    public void generarReporte(HttpServletResponse response) throws Exception {
-        List<Cliente> listaClientes = clienteService.obtenerTodosLosClientes();
-        pdfServiceCliente.generarReporte(listaClientes, response);
+    public ResponseEntity<String> generarReporte() {
+        try {
+            List<Cliente> listaClientes = clienteService.obtenerTodosLosClientes();
+            pdfServiceCliente.generarReporte(listaClientes);
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al generar el reporte.");
+        }
     }
+
 }
